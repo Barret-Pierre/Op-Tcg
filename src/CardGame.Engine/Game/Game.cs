@@ -32,13 +32,13 @@ public class Game
         TurnManager.StartTurn();
     }
 
-    public void EndTurn()
-    {
-        TurnManager.EndTurn();
-    }
-
     public void ExecuteAction(IGameAction action)
     {
         action.Execute(State);
+
+        if (action is EndTurnAction)
+        {
+            TurnManager.StartTurn();
+        }
     }
 }
