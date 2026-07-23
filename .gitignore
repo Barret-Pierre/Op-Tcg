@@ -1,0 +1,68 @@
+# Build results
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio cache/options
+.vs/
+.vscode/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider
+.idea/
+
+# Test results
+TestResults/
+*.trx
+
+# Coverage
+coverage/
+*.coverage
+*.coveragexml
+
+# NuGet packages
+*.nupkg
+packages/
+.nuget/
+**/packages/*
+
+# NuGet v3 cache
+~/.nuget/packages/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Generated files
+*.dll
+*.exe
+*.pdb
+*.cache
+
+# Publish output
+publish/
+[Oo]ut/
+
+# Dotnet tools
+.dotnet/
+
+# Environment files
+.env
+.env.*
+
+# Secrets
+secrets.json
+appsettings.*.json
+!appsettings.json
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
