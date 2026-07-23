@@ -7,7 +7,7 @@ namespace CardGame.Tests;
 public class CardTests
 {
     [Fact]
-    public void Player_should_draw_card_from_deck()
+    public void Player_can_draw_card()
     {
         var luffy = new CardDefinition
         {
@@ -20,20 +20,25 @@ public class CardTests
 
         var deck = new Deck();
 
-        deck.Add(new CardInstance(luffy));
+        deck.Add(
+            new CardInstance(luffy)
+        );
 
 
-        var player = new Player("Player 1", deck);
+        var player = new Player(
+            "Player 1",
+            deck
+        );
 
 
         player.DrawCard();
 
 
-        Assert.Single(player.Hand);
+        Assert.Equal(1, player.Hand.Count);
 
         Assert.Equal(
             "Luffy",
-            player.Hand[0].Definition.Name
+            player.Hand.Cards[0].Definition.Name
         );
     }
 }

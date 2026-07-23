@@ -7,10 +7,15 @@ public class Player
 {
     public string Name { get; }
 
+    public int Health { get; private set; } = 20;
+
     public Deck Deck { get; }
 
-    public List<CardInstance> Hand { get; } = new();
+    public Hand Hand { get; } = new();
 
+    public Board Board { get; } = new();
+
+    public DiscardPile DiscardPile { get; } = new();
 
     public Player(string name, Deck deck)
     {
@@ -21,8 +26,12 @@ public class Player
 
     public void DrawCard()
     {
-        var card = Deck.Draw();
-
-        Hand.Add(card);
+        Hand.Add(Deck.Draw());
     }
+
+    public void TakeDamage(int amount)
+    {
+        Health -= amount;
+    }
+
 }
