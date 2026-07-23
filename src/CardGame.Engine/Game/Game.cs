@@ -1,4 +1,5 @@
 using CardGame.Engine.Players;
+using CardGame.Engine.Actions;
 
 namespace CardGame.Engine.Game;
 
@@ -34,5 +35,10 @@ public class Game
     public void EndTurn()
     {
         TurnManager.EndTurn();
+    }
+
+    public void ExecuteAction(IGameAction action)
+    {
+        action.Execute(State);
     }
 }
