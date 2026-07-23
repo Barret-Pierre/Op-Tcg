@@ -19,12 +19,4 @@ public class TurnManager
         );
     }
 
-
-
-    public void EndTurn()
-    {
-        state.NextPlayer();
-
-        StartTurn();
-    }
 }
