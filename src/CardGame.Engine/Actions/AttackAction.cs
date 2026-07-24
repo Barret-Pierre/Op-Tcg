@@ -15,6 +15,13 @@ public class AttackAction : IGameAction
 
     public void Execute(GameState state)
     {
+        if (state.CurrentPhase != GamePhase.Combat)
+        {
+            throw new InvalidOperationException(
+                "Cannot attack outside combat phase"
+            );
+        }
+
         var attackerPlayer = state.CurrentPlayer;
 
 
