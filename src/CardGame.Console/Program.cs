@@ -134,6 +134,8 @@ while (game.State.Status == GameStatus.Playing)
 
         case "2":
 
+            game.TurnManager.StartCombat();
+
             if (player.Board.Count > 0)
             {
                 game.ExecuteAction(

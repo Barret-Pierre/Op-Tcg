@@ -16,6 +16,13 @@ public class PlayCardAction : IGameAction
 
     public void Execute(GameState state)
     {
+        if (state.CurrentPhase != GamePhase.Main)
+        {
+            throw new InvalidOperationException(
+                "Cards can only be played during main phase"
+            );
+        }
+
         var player = state.CurrentPlayer;
 
 

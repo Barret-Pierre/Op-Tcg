@@ -18,6 +18,8 @@ public class GameState
 
     public GameStatus Status { get; private set; }
 
+    public GamePhase CurrentPhase { get; private set; }
+
 
     public Player CurrentPlayer
     {
@@ -68,5 +70,10 @@ public class GameState
         Winner = player;
 
         Status = GameStatus.Finished;
+    }
+
+    public void ChangePhase(GamePhase phase)
+    {
+        CurrentPhase = phase;
     }
 }
