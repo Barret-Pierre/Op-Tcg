@@ -7,13 +7,16 @@ public class GameState
     public List<Player> Players { get; } = new();
 
 
+    public Player? Winner { get; private set; }
+
+
     public int CurrentPlayerIndex { get; private set; }
 
 
     public int TurnNumber { get; private set; }
 
 
-    public bool IsStarted { get; private set; }
+    public GameStatus Status { get; private set; }
 
 
     public Player CurrentPlayer
@@ -38,9 +41,8 @@ public class GameState
 
         CurrentPlayerIndex = 0;
 
-        IsStarted = true;
+        Status = GameStatus.Playing;
     }
-
 
 
     public void NextPlayer()
@@ -53,5 +55,18 @@ public class GameState
         {
             CurrentPlayerIndex = 0;
         }
+    }
+
+    public void EndGame()
+    {
+        Status = GameStatus.Finished;
+    }
+
+
+    public void SetWinner(Player player)
+    {
+        Winner = player;
+
+        Status = GameStatus.Finished;
     }
 }

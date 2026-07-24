@@ -76,48 +76,81 @@ var game = new Game(
 game.Start();
 
 
-// First draw
-
-Console.WriteLine($"{player1.Name} draws a card");
-player1.DrawCard();
-
-
-Console.WriteLine($"{player2.Name} draws a card");
-player2.DrawCard();
-Console.WriteLine();
+while (game.State.Status == GameStatus.Playing)
+{
+    var player = game.State.CurrentPlayer;
 
 
-// Play card
+    Console.WriteLine();
+    Console.WriteLine("================");
+    Console.WriteLine(
+        $"Turn {game.State.TurnNumber}"
+    );
+    Console.WriteLine(
+        $"{player.Name}'s turn"
+    );
 
-Console.WriteLine(
-    $"{player1.Name} plays {player1.Hand.Cards[0].Definition.Name}"
-);
-
-game.ExecuteAction(
-    new PlayCardAction(0)
-);
-
-Console.WriteLine();
-
-Console.WriteLine(
-    $"{player1.Name} attacks!"
-);
+    Console.WriteLine("================");
 
 
-// Attack
+    Console.WriteLine();
 
-game.ExecuteAction(
-    new AttackAction(0)
-);
+    Console.WriteLine("Hand:");
+
+    for (int i = 0; i < player.Hand.Count; i++)
+    {
+        Console.WriteLine(
+            $"{i} - {player.Hand.Cards[i].Definition.Name}"
+        );
+    }
 
 
-Console.WriteLine(
-    $"{player2.Name} HP : {player2.Health}"
-);
+    Console.WriteLine();
+
+    Console.WriteLine("1 - Play card");
+
+    Console.WriteLine("2 - Attack");
+
+    Console.WriteLine("3 - End turn");
 
 
-// End turn
+    Console.Write("> ");
 
-game.ExecuteAction(
-    new EndTurnAction()
-);
+
+    var choice = Console.ReadLine();
+
+
+    switch (choice)
+    {
+        case "1":
+
+            game.ExecuteAction(
+                new PlayCardAction(0)
+            );
+
+            break;
+
+
+
+        case "2":
+
+            if (player.Board.Count > 0)
+            {
+                game.ExecuteAction(
+                    new AttackAction(0)
+                );
+            }
+
+            break;
+
+
+
+        case "3":
+
+            game.ExecuteAction(
+                new EndTurnAction()
+            );
+
+            break;
+    }
+}
