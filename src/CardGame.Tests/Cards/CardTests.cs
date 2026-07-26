@@ -9,13 +9,12 @@ public class CardTests
     [Fact]
     public void Player_can_draw_card()
     {
-        var luffy = new CardDefinition
-        {
-            Id = 1,
-            Name = "Luffy",
-            Cost = 5,
-            Power = 7000
-        };
+        var luffy = new CharacterCardDefinition(
+            id: "1",
+            name: "Luffy",
+            cost: 5,
+            power: 7000
+        );
 
 
         var deck = new Deck();

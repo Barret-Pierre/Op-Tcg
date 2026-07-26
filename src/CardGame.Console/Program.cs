@@ -14,23 +14,19 @@ Console.WriteLine();
 
 // Create cards
 
-var luffy = new CardDefinition
-{
-    Id = 1,
-    Name = "Luffy",
-    Cost = 5,
-    Power = 7000
-};
+var luffy = new CharacterCardDefinition(
+    id: "1",
+    name: "Luffy",
+    cost: 2,
+    power: 4000
+);
 
-
-var zoro = new CardDefinition
-{
-    Id = 2,
-    Name = "Zoro",
-    Cost = 3,
-    Power = 5000
-};
-
+var zoro = new CharacterCardDefinition(
+    id: "2",
+    name: "Zoro",
+    cost: 3,
+    power: 5000
+);
 
 
 // Create decks

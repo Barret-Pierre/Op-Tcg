@@ -1,12 +1,14 @@
 namespace CardGame.Engine.Cards;
 
-public class CardDefinition
+public abstract class CardDefinition
 {
-    public int Id { get; init; }
+    public string Id { get; }
 
-    public string Name { get; set; } = string.Empty;
+    public string Name { get; }
 
-    public int Cost { get; set; }
-
-    public int Power { get; init; }
+    protected CardDefinition(string id, string name)
+    {
+        Id = id;
+        Name = name;
+    }
 }
