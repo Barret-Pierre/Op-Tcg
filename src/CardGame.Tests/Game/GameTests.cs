@@ -1,3 +1,4 @@
+using CardGame.Engine.Actions;
 using CardGame.Engine.Game;
 using CardGame.Engine.Players;
 using CardGame.Engine.Zones;
@@ -36,7 +37,9 @@ public class GameTests
         );
 
 
-        game.EndTurn();
+        game.ExecuteAction(
+           new EndTurnAction()
+       );
 
 
         Assert.Equal(

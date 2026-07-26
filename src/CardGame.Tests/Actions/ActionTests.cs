@@ -11,13 +11,12 @@ public class ActionTests
     [Fact]
     public void Player_can_play_card_using_action()
     {
-        var card = new CardDefinition
-        {
-            Id = 1,
-            Name = "Luffy",
-            Cost = 5,
-            Power = 7000
-        };
+        var card = new CharacterCardDefinition(
+            id: "1",
+            name: "Luffy",
+            cost: 5,
+            power: 7000
+        );
 
 
         var player1 = new Player(

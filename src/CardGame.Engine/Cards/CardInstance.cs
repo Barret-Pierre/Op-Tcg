@@ -1,19 +1,25 @@
 namespace CardGame.Engine.Cards;
+
 public class CardInstance
 {
-    public Guid InstanceId { get; } = Guid.NewGuid();
+    public Guid Id { get; } = Guid.NewGuid();
 
     public CardDefinition Definition { get; }
 
-    public bool IsPlayed { get; private set; }
+    public CardStatus CardStatus { get; private set; } = CardStatus.Active;
 
     public CardInstance(CardDefinition definition)
     {
         Definition = definition;
     }
 
-    public void Play()
+    public void Rest()
     {
-        IsPlayed = true;
+        CardStatus = CardStatus.Rested;
+    }
+
+    public void Activate()
+    {
+        CardStatus = CardStatus.Active;
     }
 }

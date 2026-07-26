@@ -66,3 +66,8 @@ appsettings.*.json
 *.tmp
 *.temp
 *.swp
+
+#Mermaid diagram files
+*.mermaid
+mermaid.instructions.md
+copilot-instructions.md
