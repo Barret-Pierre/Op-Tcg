@@ -43,6 +43,6 @@ public class PlayCardAction : IGameAction
         player.Board.Add(card);
 
 
-        card.Play();
+        card.Activate();
     }
 }

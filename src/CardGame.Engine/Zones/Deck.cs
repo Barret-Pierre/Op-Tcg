@@ -1,31 +1,23 @@
-namespace CardGame.Engine.Zones;
-
 using CardGame.Engine.Cards;
 
-public class Deck : Zone
+namespace CardGame.Engine.Zones;
+
+public sealed class Deck : CardZone
 {
+    private readonly Random _random = Random.Shared;
 
     public CardInstance Draw()
     {
-        if (cards.Count == 0)
-            throw new InvalidOperationException("Deck is empty");
-
-        var card = cards[0];
-
-        cards.RemoveAt(0);
-
-        return card;
+        return RemoveTopCard();
     }
 
     public void Shuffle()
     {
-        var random = new Random();
-
-        for (int i = cards.Count - 1; i > 0; i--)
+        for (int i = Cards.Count - 1; i > 0; i--)
         {
-            int j = random.Next(i + 1);
+            int j = _random.Next(i + 1);
 
-            (cards[i], cards[j]) = (cards[j], cards[i]);
+            (Cards[i], Cards[j]) = (Cards[j], Cards[i]);
         }
     }
 }
