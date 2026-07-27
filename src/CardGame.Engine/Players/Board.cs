@@ -1,5 +1,5 @@
 namespace CardGame.Engine.Zones;
 
-public class DiscardPile : Zone
+public class Board
 {
 }
