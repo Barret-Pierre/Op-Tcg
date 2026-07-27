@@ -49,15 +49,17 @@ deck2.Add(
 // Create player
 
 var player1 = new Player(
-    "Luffy",
-    deck1
+    "Luffy"
 );
+
+player1.PlayerBoard.Deck.Add(new CardInstance(luffy));
 
 
 var player2 = new Player(
-    "Zoro",
-    deck2
+    "Zoro"
 );
+
+player2.PlayerBoard.Deck.Add(new CardInstance(zoro));
 
 
 
@@ -93,10 +95,10 @@ while (game.State.Status == GameStatus.Playing)
 
     Console.WriteLine("Hand:");
 
-    for (int i = 0; i < player.Hand.Count; i++)
+    for (int i = 0; i < player.PlayerBoard.Hand.Count; i++)
     {
         Console.WriteLine(
-            $"{i} - {player.Hand.Cards[i].Definition.Name}"
+            $"{i} - {player.PlayerBoard.Hand.VisibleCards[i].Definition.Name}"
         );
     }
 
@@ -132,7 +134,7 @@ while (game.State.Status == GameStatus.Playing)
 
             game.TurnManager.StartCombat();
 
-            if (player.Board.Count > 0)
+            if (player.PlayerBoard.CharacterZone.Count > 0)
             {
                 game.ExecuteAction(
                     new AttackAction(0)

@@ -11,14 +11,12 @@ public class GameTests
     public void Game_should_switch_player_turn()
     {
         var player1 = new Player(
-            "Luffy",
-            new Deck()
+            "Luffy"
         );
 
 
         var player2 = new Player(
-            "Zoro",
-            new Deck()
+            "Zoro"
         );
 
 
