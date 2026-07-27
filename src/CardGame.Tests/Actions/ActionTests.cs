@@ -20,18 +20,16 @@ public class ActionTests
 
 
         var player1 = new Player(
-            "Luffy",
-            new Deck()
+            "Luffy"
         );
 
 
         var player2 = new Player(
-            "Zoro",
-            new Deck()
+            "Zoro"
         );
 
 
-        player1.Hand.Add(
+        player1.PlayerBoard.Hand.Add(
             new CardInstance(card)
         );
 
@@ -50,8 +48,8 @@ public class ActionTests
         );
 
 
-        Assert.Empty(player1.Hand.Cards);
+        Assert.Empty(player1.PlayerBoard.Hand.VisibleCards);
 
-        Assert.Single(player1.Board.Cards);
+        Assert.Single(player1.PlayerBoard.CharacterZone.VisibleCards);
     }
 }

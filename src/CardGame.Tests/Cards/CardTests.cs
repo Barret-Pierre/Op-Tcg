@@ -16,28 +16,26 @@ public class CardTests
             power: 7000
         );
 
+        var player = new Player(
+            "Player 1"
+        );
 
-        var deck = new Deck();
-
-        deck.Add(
+        player.PlayerBoard.Deck.Add(
             new CardInstance(luffy)
         );
 
 
-        var player = new Player(
-            "Player 1",
-            deck
+        var drawnCard = player.PlayerBoard.Deck.Draw();
+        player.PlayerBoard.Hand.Add(
+            drawnCard
         );
 
 
-        player.DrawCard();
-
-
-        Assert.Equal(1, player.Hand.Count);
+        Assert.Equal(1, player.PlayerBoard.Hand.VisibleCards.Count);
 
         Assert.Equal(
             "Luffy",
-            player.Hand.Cards[0].Definition.Name
+            player.PlayerBoard.Hand.VisibleCards[0].Definition.Name
         );
     }
 }
