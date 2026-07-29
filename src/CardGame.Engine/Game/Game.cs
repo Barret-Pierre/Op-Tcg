@@ -1,78 +1,43 @@
 using CardGame.Engine.Players;
-using CardGame.Engine.Actions;
+using CardGame.Engine.Turns;
 
-namespace CardGame.Engine.Game;
+namespace CardGame.Engine.Games;
 
 public class Game
 {
-    private const int StartingHandSize = 1;
+    public Guid Id { get; } = Guid.NewGuid();
 
-    public GameState State { get; }
+    public IReadOnlyList<Player> Players { get; }
+
+    public GameState State { get; } = new();
 
     public TurnManager TurnManager { get; }
 
+    public event EventHandler<GameStartEventArgs>? GameStarted;
 
-    public Game(
-        Player player1,
-        Player player2
-    )
+    public event EventHandler<GameEndEventArgs>? GameEnded;
+
+    public Game(IReadOnlyList<Player> players, TurnManager turnManager)
     {
-        State = new GameState();
+        if (players.Count != 2)
+            throw new ArgumentException("A game requires exactly two players.", nameof(players));
 
-
-        State.Players.Add(player1);
-
-        State.Players.Add(player2);
-
-
-        TurnManager = new TurnManager(State);
+        Players = players;
+        TurnManager = turnManager;
     }
 
     public void Start()
     {
-        State.Start();
+        State.Status = GameStatus.InProgress;
 
-        foreach (var player in State.Players)
-        {
-            for (int i = 0; i < StartingHandSize; i++)
-            {
-                player.DrawCard();
-            }
-        }
-
-        TurnManager.StartTurn();
+        GameStarted?.Invoke(this, new GameStartEventArgs());
     }
 
-    public void ExecuteAction(IGameAction action)
+    public void End()
     {
-        action.Execute(State);
+        State.Status = GameStatus.Finished;
 
-        CheckVictory();
-
-        if (action is EndTurnAction)
-        {
-            TurnManager.StartTurn();
-        }
+        GameEnded?.Invoke(this, new GameEndEventArgs());
     }
 
-    private void CheckVictory()
-    {
-        foreach (var player in State.Players)
-        {
-            if (player.Health <= 0)
-            {
-                var winner = State.Players
-                    .First(x => x != player);
-
-
-                State.SetWinner(winner);
-
-                Console.WriteLine();
-
-                Console.WriteLine(
-                    $"{winner.Name} wins!"
-                );
-            }
-        }
-    }
 }

@@ -1,79 +1,10 @@
 using CardGame.Engine.Players;
 
-namespace CardGame.Engine.Game;
+namespace CardGame.Engine.Games;
 
-public class GameState
+public sealed class GameState
 {
-    public List<Player> Players { get; } = new();
+    public Player? Winner { get; set; }
 
-
-    public Player? Winner { get; private set; }
-
-
-    public int CurrentPlayerIndex { get; private set; }
-
-
-    public int TurnNumber { get; private set; }
-
-
-    public GameStatus Status { get; private set; }
-
-    public GamePhase CurrentPhase { get; private set; }
-
-
-    public Player CurrentPlayer
-    {
-        get
-        {
-            return Players[CurrentPlayerIndex];
-        }
-    }
-
-    public void Start()
-    {
-        if (Players.Count < 2)
-        {
-            throw new InvalidOperationException(
-                "A game requires at least 2 players"
-            );
-        }
-
-
-        TurnNumber = 1;
-
-        CurrentPlayerIndex = 0;
-
-        Status = GameStatus.Playing;
-    }
-
-
-    public void NextPlayer()
-    {
-        CurrentPlayerIndex++;
-
-        TurnNumber++;
-
-        if (CurrentPlayerIndex >= Players.Count)
-        {
-            CurrentPlayerIndex = 0;
-        }
-    }
-
-    public void EndGame()
-    {
-        Status = GameStatus.Finished;
-    }
-
-
-    public void SetWinner(Player player)
-    {
-        Winner = player;
-
-        Status = GameStatus.Finished;
-    }
-
-    public void ChangePhase(GamePhase phase)
-    {
-        CurrentPhase = phase;
-    }
+    public GameStatus Status { get; set; } = GameStatus.WaitingForPlayers;
 }
