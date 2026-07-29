@@ -30,14 +30,14 @@ public class Game
     {
         State.Status = GameStatus.InProgress;
 
-        GameStarted?.Invoke(this, new GameStartEventArgs());
+        GameStarted?.Invoke(this, new GameStartEventArgs(Players, Players[0]));
     }
 
     public void End()
     {
         State.Status = GameStatus.Finished;
 
-        GameEnded?.Invoke(this, new GameEndEventArgs());
+        GameEnded?.Invoke(this, new GameEndEventArgs(State.Winner));
     }
 
 }
