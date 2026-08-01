@@ -1,6 +1,6 @@
 namespace CardGame.Engine.Actions;
 
-public abstract class Action
+public abstract class GameAction
 {
     public void Execute()
     {

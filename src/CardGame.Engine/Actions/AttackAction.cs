@@ -3,7 +3,7 @@ using CardGame.Engine.Zones;
 
 namespace CardGame.Engine.Actions;
 
-public sealed class AttackAction : Action
+public sealed class AttackAction : GameAction
 {
     private readonly CardInstance _attacker;
     private readonly CardInstance? _defenderCharacter;

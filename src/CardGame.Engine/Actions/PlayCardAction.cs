@@ -3,7 +3,7 @@ using CardGame.Engine.Zones;
 
 namespace CardGame.Engine.Actions;
 
-public sealed class PlayCardAction : Action
+public sealed class PlayCardAction : GameAction
 {
     private readonly Hand _hand;
     private readonly CharacterZone _characterZone;

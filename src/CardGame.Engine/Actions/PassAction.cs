@@ -1,6 +1,6 @@
 namespace CardGame.Engine.Actions;
 
-public sealed class PassAction : Action
+public sealed class PassAction : GameAction
 {
     protected override bool CanExecute()
     {
