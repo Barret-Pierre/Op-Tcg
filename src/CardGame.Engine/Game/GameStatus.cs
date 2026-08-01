@@ -1,10 +1,8 @@
-namespace CardGame.Engine.Game;
+namespace CardGame.Engine.Games;
 
 public enum GameStatus
 {
-    NotStarted,
-
-    Playing,
-
+    WaitingForPlayers,
+    InProgress,
     Finished
 }
