@@ -1,39 +1,70 @@
-using CardGame.Engine.Game;
+using CardGame.Engine.Cards;
+using CardGame.Engine.Zones;
 
 namespace CardGame.Engine.Actions;
 
-public class AttackAction : IGameAction
+public sealed class AttackAction : Action
 {
-    private readonly int attackerIndex;
+    private readonly CardInstance _attacker;
+    private readonly CardInstance? _defenderCharacter;
+    private readonly CharacterZone? _defenderCharacterZone;
+    private readonly DiscardZone? _defenderDiscardZone;
+    private readonly LifeZone? _defenderLifeZone;
 
-
-    public AttackAction(int attackerIndex)
+    // Attaque d'un Character adverse
+    public AttackAction(CardInstance attacker, CardInstance defenderCharacter, CharacterZone defenderCharacterZone, DiscardZone defenderDiscardZone)
     {
-        this.attackerIndex = attackerIndex;
+        _attacker = attacker;
+        _defenderCharacter = defenderCharacter;
+        _defenderCharacterZone = defenderCharacterZone;
+        _defenderDiscardZone = defenderDiscardZone;
     }
 
-
-    public void Execute(GameState state)
+    // Attaque du Leader adverse
+    public AttackAction(CardInstance attacker, LifeZone defenderLifeZone)
     {
-        if (state.CurrentPhase != GamePhase.Combat)
+        _attacker = attacker;
+        _defenderLifeZone = defenderLifeZone;
+    }
+
+    protected override bool CanExecute()
+    {
+        if (_attacker.CardStatus != CardStatus.Active)
+            return false;
+
+        // On ne peut attaquer un Character que s'il est Rested
+        if (_defenderCharacter is not null && _defenderCharacter.CardStatus != CardStatus.Rested)
+            return false;
+
+        return true;
+    }
+
+    protected override void ExecuteCore()
+    {
+        _attacker.Rest();
+
+        var attackerPower = GetPower(_attacker.Definition);
+
+        if (_defenderCharacter is not null)
         {
-            throw new InvalidOperationException(
-                "Cannot attack outside combat phase"
-            );
+            var defenderPower = GetPower(_defenderCharacter.Definition);
+
+            if (attackerPower >= defenderPower)
+            {
+                _defenderCharacterZone!.Remove(_defenderCharacter);
+                _defenderDiscardZone!.Add(_defenderCharacter);
+            }
         }
-
-        var attackerPlayer = state.CurrentPlayer;
-
-
-        var attacker = attackerPlayer.Board.Cards[attackerIndex];
-
-
-        var opponent = state.Players
-            .First(x => x != attackerPlayer);
-
-
-        opponent.TakeDamage(
-            attacker.Definition.Power
-        );
+        else
+        {
+            _defenderLifeZone!.TakeDamage();
+        }
     }
+
+    private static int GetPower(CardDefinition definition) => definition switch
+    {
+        LeaderCardDefinition leader => leader.Power,
+        CharacterCardDefinition character => character.Power,
+        _ => throw new InvalidOperationException("This card cannot attack or be attacked.")
+    };
 }

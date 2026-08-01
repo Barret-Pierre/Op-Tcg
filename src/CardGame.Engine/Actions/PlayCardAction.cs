@@ -1,48 +1,45 @@
 using CardGame.Engine.Cards;
-using CardGame.Engine.Game;
+using CardGame.Engine.Zones;
 
 namespace CardGame.Engine.Actions;
 
-public class PlayCardAction : IGameAction
+public sealed class PlayCardAction : Action
 {
-    private readonly int cardIndex;
+    private readonly Hand _hand;
+    private readonly CharacterZone _characterZone;
+    private readonly DonCostZone _donCostZone;
+    private readonly CardInstance _card;
 
-
-    public PlayCardAction(int cardIndex)
+    public PlayCardAction(Hand hand, CharacterZone characterZone, DonCostZone donCostZone, CardInstance card)
     {
-        this.cardIndex = cardIndex;
+        _hand = hand;
+        _characterZone = characterZone;
+        _donCostZone = donCostZone;
+        _card = card;
     }
 
-
-    public void Execute(GameState state)
+    protected override bool CanExecute()
     {
-        if (state.CurrentPhase != GamePhase.Main)
-        {
-            throw new InvalidOperationException(
-                "Cards can only be played during main phase"
-            );
-        }
+        if (_card.Definition is not CharacterCardDefinition character)
+            return false;
 
-        var player = state.CurrentPlayer;
+        var activeDonCount = _donCostZone.VisibleCards.Count(don => don.CardStatus == CardStatus.Active);
 
+        return activeDonCount >= character.Cost;
+    }
 
-        if (cardIndex < 0 || cardIndex >= player.Hand.Count)
-        {
-            throw new InvalidOperationException(
-                "Invalid card index"
-            );
-        }
+    protected override void ExecuteCore()
+    {
+        var character = (CharacterCardDefinition)_card.Definition;
 
+        var donToRest = _donCostZone.VisibleCards
+            .Where(don => don.CardStatus == CardStatus.Active)
+            .Take(character.Cost);
 
-        var card = player.Hand.Cards[cardIndex];
+        foreach (var don in donToRest)
+            don.Rest();
 
-
-        player.Hand.Remove(card);
-
-
-        player.Board.Add(card);
-
-
-        card.Activate();
+        _hand.Remove(_card);
+        _characterZone.Add(_card);
     }
 }
