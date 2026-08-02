@@ -7,19 +7,17 @@ public sealed class EndPhase : Phase
 {
     private const int HandLimit = 10;
     private readonly PlayerBoard _playerBoard;
-    private readonly Func<IReadOnlyList<CardInstance>, CardInstance> _chooseCardToDiscard;
 
-    public EndPhase(PlayerBoard playerBoard, Func<IReadOnlyList<CardInstance>, CardInstance> chooseCardToDiscard)
+    public EndPhase(PlayerBoard playerBoard)
     {
         _playerBoard = playerBoard;
-        _chooseCardToDiscard = chooseCardToDiscard;
     }
 
     public override void Execute()
     {
         while (_playerBoard.Hand.VisibleCards.Count > HandLimit)
         {
-            var card = _chooseCardToDiscard(_playerBoard.Hand.VisibleCards);
+            var card = _playerBoard.Hand.VisibleCards[^1];
 
             _playerBoard.Hand.Remove(card);
             _playerBoard.DiscardZone.Add(card);

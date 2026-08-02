@@ -1,8 +1,8 @@
 ﻿using CardGame.Engine.Actions;
 using CardGame.Engine.Cards;
-using CardGame.Engine.Game;
+using CardGame.Engine.Games;
 using CardGame.Engine.Players;
-using CardGame.Engine.Zones;
+using CardGame.Engine.Turns;
 
 
 Console.WriteLine("=================");
@@ -28,24 +28,6 @@ var zoro = new CharacterCardDefinition(
     power: 5000
 );
 
-
-// Create decks
-
-var deck1 = new Deck();
-
-deck1.Add(
-    new CardInstance(luffy)
-);
-
-
-var deck2 = new Deck();
-
-deck2.Add(
-    new CardInstance(zoro)
-);
-
-
-
 // Create player
 
 var player1 = new Player(
@@ -66,17 +48,18 @@ player2.PlayerBoard.Deck.Add(new CardInstance(zoro));
 // Création game
 
 var game = new Game(
-    player1,
-    player2
+    new List<Player> { player1, player2 },
+    new TurnManager()
 );
 
 
 game.Start();
 
 
-while (game.State.Status == GameStatus.Playing)
+while (game.State.Status == GameStatus.InProgress)
 {
     var player = game.State.CurrentPlayer;
+    var opponent = game.Players.First(p => p != player);
 
 
     Console.WriteLine();
@@ -121,36 +104,21 @@ while (game.State.Status == GameStatus.Playing)
     switch (choice)
     {
         case "1":
-
-            game.ExecuteAction(
-                new PlayCardAction(0)
-            );
-
+            var cardToPlay = player.PlayerBoard.Hand.VisibleCards[0];
+            game.ExecuteAction(new PlayCardAction(
+                player.PlayerBoard.Hand,
+                player.PlayerBoard.CharacterZone,
+                player.PlayerBoard.DonCostZone,
+                cardToPlay));
             break;
-
-
 
         case "2":
-
-            game.TurnManager.StartCombat();
-
-            if (player.PlayerBoard.CharacterZone.Count > 0)
-            {
-                game.ExecuteAction(
-                    new AttackAction(0)
-                );
-            }
-
+            var attacker = player.PlayerBoard.CharacterZone.VisibleCards[0];
+            game.ExecuteAction(new AttackAction(attacker, opponent.PlayerBoard.LifeZone));
             break;
 
-
-
         case "3":
-
-            game.ExecuteAction(
-                new EndTurnAction()
-            );
-
+            game.ExecuteAction(new PassAction());
             break;
     }
 }
