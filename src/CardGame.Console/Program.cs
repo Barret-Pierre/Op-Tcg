@@ -4,49 +4,127 @@ using CardGame.Engine.Games;
 using CardGame.Engine.Players;
 using CardGame.Engine.Turns;
 
-
 Console.WriteLine("=================");
 Console.WriteLine(" CARD GAME ENGINE ");
 Console.WriteLine("=================");
 Console.WriteLine();
 
+static string FormatCard(CardInstance card)
+{
+    return card.Definition switch
+    {
+        CharacterCardDefinition c => $"{c.Name} (Cost: {c.Cost} / Power: {c.Power})",
+        LeaderCardDefinition l => $"{l.Name} (Power: {l.Power})",
+        _ => card.Definition.Name
+    };
+}
+
+static void PrintBoard(string label, PlayerBoard board, bool showHand)
+{
+    var leader = board.LeaderZone.Leader;
+    Console.WriteLine($"--- {label} ---");
+    Console.WriteLine($"Leader: {FormatCard(leader)} [{leader.CardStatus}]");
+    Console.WriteLine($"Life: {board.LifeZone.Count}");
+
+    Console.WriteLine("Characters:");
+    if (board.CharacterZone.VisibleCards.Count == 0)
+        Console.WriteLine("  (vide)");
+    for (int i = 0; i < board.CharacterZone.VisibleCards.Count; i++)
+    {
+        var c = board.CharacterZone.VisibleCards[i];
+        Console.WriteLine($"  {i} - {FormatCard(c)} [{c.CardStatus}]");
+    }
+
+    var activeDon = board.DonCostZone.VisibleCards.Count(d => d.CardStatus == CardStatus.Active);
+    var totalDon = board.DonCostZone.VisibleCards.Count;
+    Console.WriteLine($"Don: {activeDon}/{totalDon} actifs");
+
+    if (showHand)
+    {
+        Console.WriteLine("Hand:");
+        for (int i = 0; i < board.Hand.Count; i++)
+            Console.WriteLine($"  {i} - {FormatCard(board.Hand.VisibleCards[i])}");
+    }
+
+    Console.WriteLine();
+}
 
 
-// Create cards
-
-var luffy = new CharacterCardDefinition(
-    id: "1",
-    name: "Luffy",
-    cost: 2,
-    power: 4000
+// Create leaders
+var luffyLeader = new LeaderCardDefinition(
+    id: "ST21-001",
+    name: "Monkey D. Luffy",
+    life: 5,
+    power: 5000
 );
 
-var zoro = new CharacterCardDefinition(
-    id: "2",
-    name: "Zoro",
-    cost: 3,
+var zoroLeader = new LeaderCardDefinition(
+    id: "OP12-020",
+    name: "Roronoa Zoro",
+    life: 5,
     power: 5000
+);
+// Create character cards
+
+var nami = new CharacterCardDefinition(
+    id: "OP01-016",
+    name: "Nami",
+    cost: 1,
+    power: 2000
+);
+
+var choper = new CharacterCardDefinition(
+    id: "ST21-008",
+    name: "Tony-TonyChoper",
+    cost: 4,
+    power: 6000
+);
+
+var koshiro = new CharacterCardDefinition(
+    id: "OP12-027",
+    name: "Koshiro",
+    cost: 2,
+    power: 1000
+);
+
+var arlong = new CharacterCardDefinition(
+    id: "OP06-023",
+    name: "Arlong",
+    cost: 4,
+    power: 6000
+);
+
+var donCard = new DonCardDefinition(
+    id: "DON",
+    name: "Don!!"
 );
 
 // Create player
 
-var player1 = new Player(
-    "Luffy"
-);
+var player1 = new Player("Luffy");
+player1.PlayerBoard.LeaderZone.Add(new CardInstance(luffyLeader));
+for (int i = 0; i < 25; i++)
+{
+    player1.PlayerBoard.Deck.Add(new CardInstance(nami));
+    player1.PlayerBoard.Deck.Add(new CardInstance(choper));
+}
+for (int i = 0; i < 10; i++)
+    player1.PlayerBoard.DonDeck.Add(new CardInstance(donCard));
 
-player1.PlayerBoard.Deck.Add(new CardInstance(luffy));
 
 
-var player2 = new Player(
-    "Zoro"
-);
-
-player2.PlayerBoard.Deck.Add(new CardInstance(zoro));
-
+var player2 = new Player("Zoro");
+player2.PlayerBoard.LeaderZone.Add(new CardInstance(zoroLeader));
+for (int i = 0; i < 25; i++)
+{
+    player2.PlayerBoard.Deck.Add(new CardInstance(koshiro));
+    player2.PlayerBoard.Deck.Add(new CardInstance(arlong));
+}
+for (int i = 0; i < 10; i++)
+    player2.PlayerBoard.DonDeck.Add(new CardInstance(donCard));
 
 
 // Création game
-
 var game = new Game(
     new List<Player> { player1, player2 },
     new TurnManager()
@@ -59,65 +137,58 @@ game.Start();
 while (game.State.Status == GameStatus.InProgress)
 {
     var player = game.State.CurrentPlayer;
+    var phaseName = game.TurnManager.CurrentTurn.CurrentPhase.GetType().Name;
     var opponent = game.Players.First(p => p != player);
 
 
+
     Console.WriteLine();
     Console.WriteLine("================");
-    Console.WriteLine(
-        $"Turn {game.State.TurnNumber}"
-    );
-    Console.WriteLine(
-        $"{player.Name}'s turn"
-    );
-
+    Console.WriteLine($"Turn {game.State.TurnNumber} - {player.Name} - {phaseName}");
     Console.WriteLine("================");
 
 
-    Console.WriteLine();
-
-    Console.WriteLine("Hand:");
-
-    for (int i = 0; i < player.PlayerBoard.Hand.Count; i++)
+    if (game.TurnManager.CurrentTurn.CurrentPhase is not CardGame.Engine.Phases.MainPhase)
     {
-        Console.WriteLine(
-            $"{i} - {player.PlayerBoard.Hand.VisibleCards[i].Definition.Name}"
-        );
+        // phase automatique déjà exécutée par Turn, rien à faire ici
+        continue;
     }
 
+    PrintBoard($"{player.Name} (vous)", player.PlayerBoard, showHand: true);
+    PrintBoard($"{opponent.Name} (adversaire)", opponent.PlayerBoard, showHand: false);
+
 
     Console.WriteLine();
-
-    Console.WriteLine("1 - Play card");
-
-    Console.WriteLine("2 - Attack");
-
-    Console.WriteLine("3 - End turn");
-
-
+    Console.WriteLine("1 - Jouer une carte");
+    Console.WriteLine("2 - Passer");
     Console.Write("> ");
 
-
     var choice = Console.ReadLine();
-
 
     switch (choice)
     {
         case "1":
-            var cardToPlay = player.PlayerBoard.Hand.VisibleCards[0];
-            game.ExecuteAction(new PlayCardAction(
-                player.PlayerBoard.Hand,
-                player.PlayerBoard.CharacterZone,
-                player.PlayerBoard.DonCostZone,
-                cardToPlay));
+            Console.Write("Index de la carte à jouer > ");
+            if (int.TryParse(Console.ReadLine(), out var index) &&
+                index >= 0 && index < player.PlayerBoard.Hand.Count)
+            {
+                var cardToPlay = player.PlayerBoard.Hand.VisibleCards[index];
+                try
+                {
+                    game.ExecuteAction(new PlayCardAction(
+                        player.PlayerBoard.Hand,
+                        player.PlayerBoard.CharacterZone,
+                        player.PlayerBoard.DonCostZone,
+                        cardToPlay));
+                }
+                catch (InvalidOperationException ex)
+                {
+                    Console.WriteLine($"Action impossible : {ex.Message}");
+                }
+            }
             break;
 
         case "2":
-            var attacker = player.PlayerBoard.CharacterZone.VisibleCards[0];
-            game.ExecuteAction(new AttackAction(attacker, opponent.PlayerBoard.LifeZone));
-            break;
-
-        case "3":
             game.ExecuteAction(new PassAction());
             break;
     }
