@@ -1,7 +1,7 @@
 using CardGame.Engine.Actions;
-using CardGame.Engine.Game;
 using CardGame.Engine.Players;
-using CardGame.Engine.Zones;
+using CardGame.Engine.Games;
+using CardGame.Engine.Turns;
 
 namespace CardGame.Tests;
 
@@ -21,8 +21,8 @@ public class GameTests
 
 
         var game = new Game(
-            player1,
-            player2
+            new List<Player> { player1, player2 },
+            new TurnManager()
         );
 
 
@@ -36,7 +36,7 @@ public class GameTests
 
 
         game.ExecuteAction(
-           new EndTurnAction()
+           new PassAction()
        );
 
 
