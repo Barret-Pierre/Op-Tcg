@@ -31,7 +31,7 @@ public class CardTests
         );
 
 
-        Assert.Equal(1, player.PlayerBoard.Hand.VisibleCards.Count);
+        Assert.Single(player.PlayerBoard.Hand.VisibleCards);
 
         Assert.Equal(
             "Luffy",

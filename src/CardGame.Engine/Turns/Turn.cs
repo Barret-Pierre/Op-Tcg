@@ -34,7 +34,7 @@ public sealed class Turn
 
     public void Start()
     {
-        CurrentPhase.Execute();
+        AdvanceUntilMain();
     }
 
     public void NextPhase()
@@ -43,10 +43,19 @@ public sealed class Turn
             return;
 
         _currentPhaseIndex++;
-
         PhaseChanged?.Invoke(this, new PhaseChangedEventArgs(CurrentPhase));
 
+        if (CurrentPhase is MainPhase)
+        {
+            // TODO : A supprimer, garde la cohérence avec l'ancienne version, mais pas nécessaire
+            CurrentPhase.Execute(); // no-op, mais garde la cohérence
+            return;
+        }
+
         CurrentPhase.Execute();
+
+        if (CurrentPhase is not MainPhase and not EndPhase)
+            NextPhase();
     }
 
     public void ExecuteAction(GameAction action)
@@ -61,5 +70,13 @@ public sealed class Turn
         }
 
         mainPhase.ExecuteAction(action);
+    }
+
+    private void AdvanceUntilMain()
+    {
+        CurrentPhase.Execute();
+
+        while (CurrentPhase is not MainPhase)
+            NextPhase();
     }
 }

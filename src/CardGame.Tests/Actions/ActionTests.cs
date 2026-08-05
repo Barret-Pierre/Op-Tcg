@@ -1,8 +1,8 @@
 using CardGame.Engine.Actions;
 using CardGame.Engine.Cards;
-using CardGame.Engine.Game;
+using CardGame.Engine.Games;
 using CardGame.Engine.Players;
-using CardGame.Engine.Zones;
+using CardGame.Engine.Turns;
 
 namespace CardGame.Tests;
 
@@ -35,16 +35,22 @@ public class ActionTests
 
 
         var game = new Game(
-            player1,
-            player2
+            new List<Player> { player1, player2 },
+            new TurnManager()
         );
+
 
 
         game.Start();
 
 
         game.ExecuteAction(
-            new PlayCardAction(0)
+            new PlayCardAction(
+                player1.PlayerBoard.Hand,
+                player1.PlayerBoard.CharacterZone,
+                player1.PlayerBoard.DonCostZone,
+                player1.PlayerBoard.Hand.VisibleCards[0]
+            )
         );
 
 
