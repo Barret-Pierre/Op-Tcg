@@ -16,8 +16,10 @@ public sealed class DonPhase : Phase
     {
         for (var i = 0; i < DonPerTurn; i++)
         {
-            var don = _playerBoard.DonDeck.Draw();
+            if (_playerBoard.DonDeck.IsEmpty)
+                break;
 
+            var don = _playerBoard.DonDeck.Draw();
             _playerBoard.DonCostZone.Add(don);
         }
     }
