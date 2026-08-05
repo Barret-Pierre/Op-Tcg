@@ -110,6 +110,10 @@ for (int i = 0; i < 25; i++)
 }
 for (int i = 0; i < 10; i++)
     player1.PlayerBoard.DonDeck.Add(new CardInstance(donCard));
+player1.PlayerBoard.Deck.Shuffle();
+FillLifeZone(player1.PlayerBoard);
+for (int i = 0; i < 4; i++)
+    player1.PlayerBoard.Hand.Add(player1.PlayerBoard.Deck.Draw());
 
 
 
@@ -123,6 +127,18 @@ for (int i = 0; i < 25; i++)
 for (int i = 0; i < 10; i++)
     player2.PlayerBoard.DonDeck.Add(new CardInstance(donCard));
 
+player2.PlayerBoard.Deck.Shuffle();
+FillLifeZone(player2.PlayerBoard);
+for (int i = 0; i < 4; i++)
+    player2.PlayerBoard.Hand.Add(player2.PlayerBoard.Deck.Draw());
+
+static void FillLifeZone(PlayerBoard board)
+{
+    var leader = (LeaderCardDefinition)board.LeaderZone.Leader.Definition;
+
+    for (int i = 0; i < leader.Life; i++)
+        board.LifeZone.Add(board.Deck.Draw());
+}
 
 // Création game
 var game = new Game(
@@ -161,6 +177,7 @@ while (game.State.Status == GameStatus.InProgress)
     Console.WriteLine();
     Console.WriteLine("1 - Jouer une carte");
     Console.WriteLine("2 - Passer");
+    Console.WriteLine("3 - Attaquer");
     Console.Write("> ");
 
     var choice = Console.ReadLine();
@@ -191,5 +208,60 @@ while (game.State.Status == GameStatus.InProgress)
         case "2":
             game.ExecuteAction(new PassAction());
             break;
+        case "3":
+            Console.Write("Index de l'attaquant (-1 pour le Leader) > ");
+            if (!int.TryParse(Console.ReadLine(), out var attackerIndex))
+                break;
+
+            CardInstance? attacker = null;
+
+            if (attackerIndex == -1)
+            {
+                attacker = player.PlayerBoard.LeaderZone.Leader;
+            }
+            else if (attackerIndex >= 0 && attackerIndex < player.PlayerBoard.CharacterZone.VisibleCards.Count)
+            {
+                attacker = player.PlayerBoard.CharacterZone.VisibleCards[attackerIndex];
+
+            }
+
+            if (attacker is null)
+            {
+                Console.WriteLine("Attaquant invalide.");
+                break;
+            }
+
+            Console.WriteLine("Cible : L - Leader adverse, ou index d'un Character adverse Rested");
+            Console.Write("> ");
+            var targetChoice = Console.ReadLine();
+
+            try
+            {
+                if (string.Equals(targetChoice, "L", StringComparison.OrdinalIgnoreCase))
+                {
+                    game.ExecuteAction(new AttackAction(attacker, opponent.PlayerBoard.LeaderZone.Leader, opponent.PlayerBoard.LifeZone));
+                }
+                else if (int.TryParse(targetChoice, out var targetIndex) &&
+                         targetIndex >= 0 && targetIndex < opponent.PlayerBoard.CharacterZone.VisibleCards.Count)
+                {
+                    var defender = opponent.PlayerBoard.CharacterZone.VisibleCards[targetIndex];
+                    game.ExecuteAction(new AttackAction(
+                        attacker,
+                        defender,
+                        opponent.PlayerBoard.CharacterZone,
+                        opponent.PlayerBoard.DiscardZone));
+                }
+                else
+                {
+                    Console.WriteLine("Cible invalide.");
+                }
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine($"Action impossible : {ex.Message}");
+            }
+            break;
     }
+    if (game.State.Status == GameStatus.Finished)
+        Console.WriteLine($"Partie terminée ! Vainqueur : {game.State.Winner?.Name}");
 }

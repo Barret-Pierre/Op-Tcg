@@ -33,9 +33,21 @@ public class Game
         State.CurrentPlayer = Players[0];
         State.TurnNumber = 1;
 
+        foreach (var player in Players)
+            player.PlayerBoard.LifeZone.DamageTaken += (_, _) => CheckDefeat(player);
+
         GameStarted?.Invoke(this, new GameStartEventArgs(Players, Players[0]));
 
         TurnManager.StartTurn(State.CurrentPlayer);
+    }
+
+    private void CheckDefeat(Player player)
+    {
+        if (!player.PlayerBoard.LifeZone.IsEmpty)
+            return;
+
+        State.Winner = Players.First(p => p != player);
+        End();
     }
 
     public void ExecuteAction(GameAction action)

@@ -7,6 +7,7 @@ public sealed class AttackAction : GameAction
 {
     private readonly CardInstance _attacker;
     private readonly CardInstance? _defenderCharacter;
+    private readonly CardInstance? _defenderLeader;
     private readonly CharacterZone? _defenderCharacterZone;
     private readonly DiscardZone? _defenderDiscardZone;
     private readonly LifeZone? _defenderLifeZone;
@@ -21,9 +22,10 @@ public sealed class AttackAction : GameAction
     }
 
     // Attaque du Leader adverse
-    public AttackAction(CardInstance attacker, LifeZone defenderLifeZone)
+    public AttackAction(CardInstance attacker, CardInstance defenderLeader, LifeZone defenderLifeZone)
     {
         _attacker = attacker;
+        _defenderLeader = defenderLeader;
         _defenderLifeZone = defenderLifeZone;
     }
 
@@ -57,7 +59,10 @@ public sealed class AttackAction : GameAction
         }
         else
         {
-            _defenderLifeZone!.TakeDamage();
+            var defenderPower = GetPower(_defenderLeader!.Definition);
+
+            if (attackerPower >= defenderPower)
+                _defenderLifeZone!.TakeDamage();
         }
     }
 
