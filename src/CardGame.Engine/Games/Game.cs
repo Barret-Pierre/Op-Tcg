@@ -34,7 +34,9 @@ public class Game
         State.TurnNumber = 1;
 
         foreach (var player in Players)
+        {
             player.PlayerBoard.LifeZone.DamageTaken += (_, _) => CheckDefeat(player);
+        }
 
         GameStarted?.Invoke(this, new GameStartEventArgs(Players, Players[0]));
 

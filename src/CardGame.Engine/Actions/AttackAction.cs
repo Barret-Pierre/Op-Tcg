@@ -11,6 +11,8 @@ public sealed class AttackAction : GameAction
     private readonly CharacterZone? _defenderCharacterZone;
     private readonly DiscardZone? _defenderDiscardZone;
     private readonly LifeZone? _defenderLifeZone;
+    public AttackOutcome Outcome { get; private set; }
+
 
     // Attaque d'un Character adverse
     public AttackAction(CardInstance attacker, CardInstance defenderCharacter, CharacterZone defenderCharacterZone, DiscardZone defenderDiscardZone)
@@ -55,6 +57,12 @@ public sealed class AttackAction : GameAction
             {
                 _defenderCharacterZone!.Remove(_defenderCharacter);
                 _defenderDiscardZone!.Add(_defenderCharacter);
+                Outcome = AttackOutcome.CharacterDefeated;
+
+            }
+            else
+            {
+                Outcome = AttackOutcome.CharacterSurvived;
             }
         }
         else
@@ -62,7 +70,14 @@ public sealed class AttackAction : GameAction
             var defenderPower = GetPower(_defenderLeader!.Definition);
 
             if (attackerPower >= defenderPower)
+            {
                 _defenderLifeZone!.TakeDamage();
+                Outcome = AttackOutcome.LifeLost;
+            }
+            else
+            {
+                Outcome = AttackOutcome.LeaderResisted;
+            }
         }
     }
 
