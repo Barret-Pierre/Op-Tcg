@@ -1,6 +1,6 @@
 # TODO
 
-- [ ] Mettre à jour le mermaid
+- [x] Mettre à jour le mermaid
 - [ ] Changer le namepsace CardGame Console
 - [ ] Ajouter une version au projet
 - [ ] Ajouter le conter dans les phase d'attaque
