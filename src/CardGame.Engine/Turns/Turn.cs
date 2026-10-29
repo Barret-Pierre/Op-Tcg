@@ -6,13 +6,13 @@ namespace CardGame.Engine.Turns;
 
 public sealed class Turn
 {
-    private readonly List<Phase> _phases;
+    private readonly List<IPhase> _phases;
 
     private int _currentPhaseIndex;
 
     public Player ActivePlayer { get; }
 
-    public Phase CurrentPhase => _phases[_currentPhaseIndex];
+    public IPhase CurrentPhase => _phases[_currentPhaseIndex];
 
     public event EventHandler<PhaseChangedEventArgs>? PhaseChanged;
 
@@ -60,7 +60,7 @@ public sealed class Turn
 
     public void ExecuteAction(GameAction action)
     {
-        if (CurrentPhase is not MainPhase mainPhase)
+        if (CurrentPhase is not MainPhase)
             throw new InvalidOperationException("Actions can only be executed during the main phase.");
 
         if (action is PassAction)
@@ -69,7 +69,7 @@ public sealed class Turn
             return;
         }
 
-        mainPhase.ExecuteAction(action);
+        MainPhase.ExecuteAction(action);
     }
 
     private void AdvanceUntilMain()

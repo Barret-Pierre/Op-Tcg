@@ -2,7 +2,7 @@ using CardGame.Engine.Players;
 
 namespace CardGame.Engine.Phases;
 
-public sealed class DonPhase : Phase
+public sealed class DonPhase : IPhase
 {
     private const int DonPerTurn = 2;
 
@@ -12,7 +12,7 @@ public sealed class DonPhase : Phase
     {
         _playerBoard = playerBoard;
     }
-    public override void Execute()
+    public void Execute()
     {
         for (var i = 0; i < DonPerTurn; i++)
         {

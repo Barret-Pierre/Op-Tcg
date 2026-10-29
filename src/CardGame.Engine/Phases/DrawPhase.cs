@@ -2,7 +2,7 @@ using CardGame.Engine.Players;
 
 namespace CardGame.Engine.Phases;
 
-public sealed class DrawPhase : Phase
+public sealed class DrawPhase : IPhase
 {
     private readonly PlayerBoard _playerBoard;
 
@@ -11,7 +11,7 @@ public sealed class DrawPhase : Phase
         _playerBoard = playerBoard;
     }
 
-    public override void Execute()
+    public void Execute()
     {
         var card = _playerBoard.Deck.Draw();
 

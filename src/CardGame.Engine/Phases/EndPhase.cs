@@ -3,7 +3,7 @@ using CardGame.Engine.Cards;
 
 namespace CardGame.Engine.Phases;
 
-public sealed class EndPhase : Phase
+public sealed class EndPhase : IPhase
 {
     private const int HandLimit = 10;
     private readonly PlayerBoard _playerBoard;
@@ -13,7 +13,7 @@ public sealed class EndPhase : Phase
         _playerBoard = playerBoard;
     }
 
-    public override void Execute()
+    public void Execute()
     {
         while (_playerBoard.Hand.VisibleCards.Count > HandLimit)
         {

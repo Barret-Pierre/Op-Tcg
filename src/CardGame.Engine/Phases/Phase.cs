@@ -1,6 +1,6 @@
 namespace CardGame.Engine.Phases;
 
-public abstract class Phase
+public interface IPhase
 {
     public abstract void Execute();
 
