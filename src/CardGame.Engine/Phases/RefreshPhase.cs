@@ -2,7 +2,7 @@ using CardGame.Engine.Players;
 
 namespace CardGame.Engine.Phases;
 
-public sealed class RefreshPhase : Phase
+public sealed class RefreshPhase : IPhase
 {
     private readonly PlayerBoard _playerBoard;
 
@@ -10,7 +10,7 @@ public sealed class RefreshPhase : Phase
     {
         _playerBoard = playerBoard;
     }
-    public override void Execute()
+    public void Execute()
     {
         _playerBoard.LeaderZone.Leader.Activate();
 

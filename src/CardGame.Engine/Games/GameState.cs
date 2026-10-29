@@ -8,7 +8,7 @@ public sealed class GameState
 
     public GameStatus Status { get; set; } = GameStatus.WaitingForPlayers;
 
-    public Player CurrentPlayer { get; set; } = null!;
+    public Player? CurrentPlayer { get; set; }
 
     public int TurnNumber { get; set; }
 }

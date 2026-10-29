@@ -2,13 +2,13 @@ using CardGame.Engine.Actions;
 
 namespace CardGame.Engine.Phases;
 
-public sealed class MainPhase : Phase
+public sealed class MainPhase : IPhase
 {
-    public override void Execute()
+    public void Execute()
     {
     }
 
-    public void ExecuteAction(GameAction action)
+    public static void ExecuteAction(GameAction action)
     {
         action.Execute();
     }

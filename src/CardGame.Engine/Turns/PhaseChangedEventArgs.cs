@@ -4,10 +4,10 @@ namespace CardGame.Engine.Turns;
 
 public sealed class PhaseChangedEventArgs : EventArgs
 {
-    public PhaseChangedEventArgs(Phase phase)
+    public PhaseChangedEventArgs(IPhase phase)
     {
         Phase = phase;
     }
 
-    public Phase Phase { get; }
+    public IPhase Phase { get; }
 }
