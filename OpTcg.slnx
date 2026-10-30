@@ -1,7 +1,7 @@
 <Solution>
   <Folder Name="/src/">
-    <Project Path="src/CardGame.Console/CardGame.Console.csproj" />
     <Project Path="src/CardGame.Engine/CardGame.Engine.csproj" />
+    <Project Path="src/CardGame.Sandbox/CardGame.Sandbox.csproj" />
     <Project Path="src/CardGame.Tests/CardGame.Tests.csproj" />
   </Folder>
 </Solution>
