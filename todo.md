@@ -1,8 +1,9 @@
 # TODO
 
 - [x] Mettre à jour le mermaid
-- [ ] Changer le namepsace CardGame Console
-- [ ] Ajouter une version au projet
+- [x] Changer le namepsace CardGame Console
+- [x] Ajouter une version au projet
+- [ ] Corriger les tests qui plantent
 - [ ] Ajouter le conter dans les phase d'attaque
 - [ ] Fixer la règle de pioche ou d'attaque du premier joueur
 - [ ] Attacher un don à une carte

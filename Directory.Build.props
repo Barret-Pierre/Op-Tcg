@@ -1,0 +1,12 @@
+<Project>
+
+    <PropertyGroup>
+        <VersionPrefix>0.1.0</VersionPrefix>
+        <!-- Ajouter <VersionSuffix>alpha.1</VersionSuffix> pour les pré-versions -->
+
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+</Project>
