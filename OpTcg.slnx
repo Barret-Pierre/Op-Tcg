@@ -4,6 +4,6 @@
     <Project Path="src/CardGame.Sandbox/CardGame.Sandbox.csproj" />
   </Folder>
   <Folder Name="/tests/">
-    <Project Path="tests/CardGame.Tests/CardGame.Tests.csproj" />
+    <Project Path="tests/CardGame.Engine.Tests/CardGame.Engine.Tests.csproj" />
   </Folder>
 </Solution>

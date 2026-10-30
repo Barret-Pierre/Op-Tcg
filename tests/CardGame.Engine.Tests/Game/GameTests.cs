@@ -3,7 +3,7 @@ using CardGame.Engine.Players;
 using CardGame.Engine.Games;
 using CardGame.Engine.Turns;
 
-namespace CardGame.Tests;
+namespace CardGame.Engine.Tests.Game;
 
 public class GameTests
 {

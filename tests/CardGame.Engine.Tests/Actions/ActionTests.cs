@@ -1,10 +1,9 @@
 using CardGame.Engine.Actions;
 using CardGame.Engine.Cards;
-using CardGame.Engine.Games;
 using CardGame.Engine.Players;
 using CardGame.Engine.Turns;
 
-namespace CardGame.Tests;
+namespace CardGame.Engine.Tests.Actions;
 
 public class ActionTests
 {
@@ -34,7 +33,7 @@ public class ActionTests
         );
 
 
-        var game = new Game(
+        var game = new Games(
             new List<Player> { player1, player2 },
             new TurnManager()
         );

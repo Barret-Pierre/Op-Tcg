@@ -2,7 +2,7 @@ using CardGame.Engine.Cards;
 using CardGame.Engine.Players;
 using CardGame.Engine.Zones;
 
-namespace CardGame.Tests;
+namespace CardGame.Engine.Tests.Cards;
 
 public class CardTests
 {
